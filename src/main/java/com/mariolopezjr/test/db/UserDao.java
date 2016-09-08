@@ -2,12 +2,15 @@ package com.mariolopezjr.test.db;
 
 import com.mariolopezjr.test.beans.User;
 
+import java.util.List;
+
 public class UserDao {
-    public User findUser(int id) {
+    public List<User> findUserRows(int id) {
+        // implementation goes here
         return null;
     }
 
     public void persistUser(User user) {
-        // do nothing
+        // implementation goes here
     }
 }
