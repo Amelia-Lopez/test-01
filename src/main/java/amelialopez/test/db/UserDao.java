@@ -1,6 +1,6 @@
-package com.mariolopezjr.test.db;
+package amelialopez.test.db;
 
-import com.mariolopezjr.test.beans.User;
+import amelialopez.test.beans.User;
 
 import java.util.List;
 

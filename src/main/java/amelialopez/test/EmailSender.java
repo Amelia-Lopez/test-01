@@ -1,4 +1,4 @@
-package com.mariolopezjr.test;
+package amelialopez.test;
 
 public class EmailSender {
 

@@ -1,4 +1,4 @@
-package com.mariolopezjr.test.beans;
+package amelialopez.test.beans;
 
 public class User {
     public int id;

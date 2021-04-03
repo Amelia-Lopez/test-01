@@ -1,4 +1,4 @@
-group 'com.mariolopezjr'
+group 'amelialopez'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
