@@ -1,6 +1,6 @@
 package amelialopez.test;
 
-import amelialopez.test.beans.User;
+import amelialopez.test.beans.User ;
 
 import java.io.FileNotFoundException;
 import amelialopez.test.db.UserDao;
@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class WorkoutService {
+public class WorkoutService{
     UserDao userDao = new UserDao();
 
     EmailSender emailSender = new EmailSender();
@@ -24,6 +24,7 @@ public class WorkoutService {
 
         StringBuffer workoutString = new StringBuffer();
 
+        // build a string with the workout details to persist into the database
         workoutString.append(details.get("exercise type") + ",");
         workoutString.append(details.get("start time") + ",");
         if (details.get("end time") != null) workoutString.append(details.get("end tiem") + ",");
@@ -34,17 +35,18 @@ public class WorkoutService {
         workoutString.append("calories" + ",");
         if (details.get("reps") != null) workoutString.append(details.get("reps"));
 
-        String workout = workoutString.toString() + "\n";
+        String workout = workoutString.toString() + "\r\n";
 
-        System.out.println("User: " + users.get(0) + " logged workout: " + workout);
+        System.out.println("User: " + users.get(0) + "logged workout: " + workout);
 
+        // create new instance of User, so we can persist it into the database
         User newWorkoutRow = new User();
         newWorkoutRow.id = users.get(0).id;
         newWorkoutRow.name = users.get(0).name;
         newWorkoutRow.email = users.get(0).email;
         newWorkoutRow.memberSince = users.get(0).memberSince;
         newWorkoutRow.coachId = users.get(0).coachId;
-        newWorkoutRow.workoutDetails = workout;
+        newWorkoutRow.workoutDetails = workoutString.toString();
 
         userDao.persistUser(newWorkoutRow);
 
@@ -55,19 +57,20 @@ public class WorkoutService {
 
         RecordKeeper.setDistance(totalDistance);
 
+        // generate body of email to send to the user's coach
         StringBuffer emailBody = new StringBuffer();
         emailBody.append("Dear " + coach.name + ",\n\n");
         emailBody.append("Your student ");
         emailBody.append(users.get(0).name);
-        emailBody.append("logged a workout with the following details: \n");
+        emailBody.append("logged a workout with the following details: \r\n");
         emailBody.append(newWorkoutRow.workoutDetails);
         emailBody.append("\n\n");;
-        emailBody.append("They have burned a total number of calories: ");
+        emailBody.append("They have burned a total number of calories:");
         emailBody.append(totalCaloriesBurned + "\n");
         emailBody.append("On date:");
         emailBody.append(new Date());
 
-        String coachEmailAddress = coach.email + "@rackspace.com";
+        String coachEmailAddress = coach.email + "@company.com";
         if (coachEmailAddress.substring(0, 1) == "@") {
             throw new RuntimeException("Coach does not have an e-mail address.");
         } else {
@@ -75,7 +78,12 @@ public class WorkoutService {
         }
 
         try {
-            emailSender.sendEmail(coachEmailAddress, "system@rackspace.com", "Workout Logged", emailBody.toString(), getEmailLoginCredentials());
+            emailSender.sendEmail(
+                    coachEmailAddress,
+                    "system@company.com",
+                    "Workout Logged",
+                    emailBody.toString(),
+                    getEmailLoginCredentials());
         } catch (Throwable t) {
             throw new RuntimeException("Error sending e-mail.");
         }
@@ -88,7 +96,7 @@ public class WorkoutService {
             emailBody.append(totalDistance);
 
             try {
-                emailSender.sendEmail(coachEmailAddress, "system@rackspace.comm", "Achievement!", emailBody.toString(), getEmailLoginCredentials());
+                emailSender.sendEmail(coachEmailAddress, "system@company.comm", "Achievement!", emailBody.toString(), getEmailLoginCredentials());
             } catch (Throwable t) {
                 throw new RuntimeException("Error sending e-mail.");
             }
